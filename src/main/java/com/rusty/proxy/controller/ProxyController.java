@@ -19,19 +19,14 @@ public class ProxyController {
         this.proxySerivce = proxySerivce;
     }
 
-//    @GetMapping("/tax/find/{id}")
-//    private TaxBill getFindId(@PathVariable String id){
-//        //return proxySerivce.getPaymentBill(id);
-//        TaxBill taxBill;
-//        return taxBill;
-//    }
-
-
     @GetMapping("/tax/bill")
     private TaxBill getPaymentBill(TaxBill taxBill){
 
         return proxySerivce.getPaymentBill(taxBill);
     }
+
+
+
 
 
 }
