@@ -1,9 +1,9 @@
 package com.rusty.proxy.domain.service;
 
 import com.rusty.proxy.domain.dto.TaxBill;
+import com.rusty.proxy.domain.dto.User;
 
 public interface ProxySerivce {
-
-    TaxBill getPaymentBill(TaxBill taxBill);
+    User find(String id);
 
 }
