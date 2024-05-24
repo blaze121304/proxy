@@ -27,20 +27,20 @@ public class ProxyController {
         return null;
     }
 
-    @GetMapping("/tax/{id}")
-    private TaxBill findTaxById(TaxBill taxBill){
-        return null;
-    }
-
-    @PostMapping("/reg/{id}")
-    private TaxBill registId(TaxBill taxBill){
-        return null;
-    }
-
-    @PostMapping("/modify/{id}")
-    private TaxBill modifyId(TaxBill taxBill){
-        return null;
-    }
+//    @GetMapping("/tax/{id}")
+//    private TaxBill findTaxById(TaxBill taxBill){
+//        return null;
+//    }
+//
+//    @PostMapping("/reg/{id}")
+//    private TaxBill registId(TaxBill taxBill){
+//        return null;
+//    }
+//
+//    @PostMapping("/modify/{id}")
+//    private TaxBill modifyId(TaxBill taxBill){
+//        return null;
+//    }
 
 
 }
