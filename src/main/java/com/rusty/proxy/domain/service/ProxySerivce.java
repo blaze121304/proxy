@@ -6,4 +6,5 @@ import com.rusty.proxy.domain.dto.User;
 public interface ProxySerivce {
     User find(String id);
 
+    User findAll();
 }

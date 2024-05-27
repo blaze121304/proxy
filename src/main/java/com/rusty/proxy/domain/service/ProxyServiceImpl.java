@@ -10,25 +10,35 @@ import org.springframework.web.client.RestTemplate;
 public class ProxyServiceImpl implements ProxySerivce{
 
     private final RestTemplate restTemplate;
+    private final User user;
 
     @Autowired
-    public ProxyServiceImpl(RestTemplate restTemplate) {
+    public ProxyServiceImpl(RestTemplate restTemplate, User user) {
         this.restTemplate = restTemplate;
-    }
+        this.user = user;
 
-    /**
-     * @param id
-     * @return
-     */
-    @Override
-    public User find(String id) {
-
-        User user = new User();
         user.setId("rusty");
         user.setAddr("부산");
         user.setName("KIMKIWOOK");
         user.setTaxNum("1124211");
 
+    }
+
+    /**
+     * @param id
+     * @return User
+     */
+    @Override
+    public User find(String id) {
+
+        return user.get
+    }
+
+    /**
+     * @return User
+     */
+    @Override
+    public User findAll() {
         return user;
     }
 }

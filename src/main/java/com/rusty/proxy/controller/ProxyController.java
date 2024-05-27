@@ -23,8 +23,8 @@ public class ProxyController {
     }
 
     @GetMapping("/user")
-    private TaxBill findAll(TaxBill taxBill){
-        return null;
+    private User findAll(User user){
+        return proxySerivce.findAll();
     }
 
 //    @GetMapping("/tax/{id}")
