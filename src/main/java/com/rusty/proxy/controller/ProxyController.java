@@ -1,9 +1,10 @@
 package com.rusty.proxy.controller;
 
-import com.rusty.proxy.domain.dto.TaxBill;
+import com.rusty.proxy.domain.dto.ProxyDto;
 import com.rusty.proxy.domain.dto.User;
 import com.rusty.proxy.domain.service.ProxySerivce;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -17,30 +18,14 @@ public class ProxyController {
         this.proxySerivce = proxySerivce;
     }
 
-    @GetMapping("/user/{id}")
-    private User findUserById(@PathVariable String id){
-        return proxySerivce.find(id);
+    @PostMapping("/alert")
+    private ResponseEntity<String> sendAlert(ProxyDto proxyDto){
+        return proxySerivce.alert(proxyDto);
     }
 
-    @GetMapping("/user")
-    private User findAll(User user){
-        return proxySerivce.findAll();
+    @PostMapping("/test")
+    @ResponseBody
+    private User sendTest(@RequestBody User user){
+        return user;
     }
-
-//    @GetMapping("/tax/{id}")
-//    private TaxBill findTaxById(TaxBill taxBill){
-//        return null;
-//    }
-//
-//    @PostMapping("/reg/{id}")
-//    private TaxBill registId(TaxBill taxBill){
-//        return null;
-//    }
-//
-//    @PostMapping("/modify/{id}")
-//    private TaxBill modifyId(TaxBill taxBill){
-//        return null;
-//    }
-
-
 }

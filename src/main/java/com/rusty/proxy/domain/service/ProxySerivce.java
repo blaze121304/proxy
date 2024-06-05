@@ -1,10 +1,8 @@
 package com.rusty.proxy.domain.service;
 
-import com.rusty.proxy.domain.dto.TaxBill;
-import com.rusty.proxy.domain.dto.User;
+import com.rusty.proxy.domain.dto.ProxyDto;
+import org.springframework.http.ResponseEntity;
 
 public interface ProxySerivce {
-    User find(String id);
-
-    User findAll();
+    ResponseEntity<String> alert(ProxyDto proxyDto);
 }
