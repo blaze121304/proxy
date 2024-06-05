@@ -37,22 +37,16 @@ public class ProxyServiceImpl implements ProxySerivce{
 
         MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
         body.add("orgCode",proxyDto.getOrgCode());
-//        body.add("param1", proxyDto.getParam1());
-//        body.add("param2", proxyDto.getParam2());
+        body.add("userName",proxyDto.getUserName());
 
+        HttpEntity<MultiValueMap<String, String>> requestEntity = new HttpEntity<>(body, headers);
+        //String response = restTemplate.postForObject(url, body, String.class);
 
-
-
-        //HttpEntity<String> requestEntity = new HttpEntity<>(body, headers);
-
-//        ResponseEntity<String> response = restTemplate.postForEntity(url, requestEntity, String.class);
-//
-//
-//        try{
-//            return restTemplate.<String>exchange(url, HttpMethod.POST, requestEntity, String.class);
-//        }catch (RestClientException rcex){
-//            throw new RestClientException("[Service] RestClientException : " + rcex.getMessage());
-//        }
+        try{
+            return restTemplate.exchange(url, HttpMethod.POST, requestEntity, String.class);
+        }catch (RestClientException rcex){
+            throw new RestClientException("[Service] RestClientException : " + rcex.getMessage());
+        }
 
     }
 }
