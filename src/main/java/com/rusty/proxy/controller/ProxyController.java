@@ -31,9 +31,9 @@ public class ProxyController {
         return proxySerivce.carFine(carDto);
 
     }
-    @GetMapping(value = "/cfine")
+    @GetMapping(value = "/cnfine")
     @ResponseBody
-    private ResponseEntity<ProxyDto> carFine(@RequestBody String carName){
+    private ResponseEntity<ProxyDto> carFineNum(@RequestBody String carName){
 
         return proxySerivce.carFine(carName);
 

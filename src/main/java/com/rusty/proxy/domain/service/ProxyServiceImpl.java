@@ -3,6 +3,7 @@ package com.rusty.proxy.domain.service;
 import com.rusty.proxy.domain.dto.CarDto;
 import com.rusty.proxy.domain.dto.ProxyDto;
 import com.rusty.proxy.domain.vo.ProxyVo;
+import com.rusty.proxy.infra.Repository.InsertJpa;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
@@ -19,10 +20,12 @@ import java.util.Collections;
 public class ProxyServiceImpl implements ProxySerivce{
 
     private final RestTemplate restTemplate;
+    private final InsertJpa insertJpa;
 
     @Autowired
-    public ProxyServiceImpl(RestTemplate restTemplate) {
+    public ProxyServiceImpl(RestTemplate restTemplate, InsertJpa insertJpa) {
         this.restTemplate = restTemplate;
+        this.insertJpa = insertJpa;
     }
 
     /**
@@ -59,21 +62,19 @@ public class ProxyServiceImpl implements ProxySerivce{
     public ResponseEntity<ProxyDto> carFine(CarDto carDto) {
 
         String url = "";    //가산으로 요청할 url (차 번호로 request)
-
-        HttpHeaders headers = new HttpHeaders();
-        headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
-        headers.setContentType(new MediaType("application","json",StandardCharsets.UTF_8));
-
+        HttpHeaders headers = getHttpHeadersJson();
         HttpEntity<CarDto> requestEntity = new HttpEntity<>(carDto,headers);
 
         try{
             ResponseEntity<ProxyDto> responseEntity = restTemplate.exchange(url,HttpMethod.GET,requestEntity,ProxyDto.class);
+            saveDB(requestEntity,responseEntity);
             return responseEntity;
         }catch (RestClientException rcex){
             throw new RestClientException("[Service] RestClientException : " + rcex.getMessage());
         }
 
     }
+
 
     /**
      * @param carName
@@ -83,21 +84,34 @@ public class ProxyServiceImpl implements ProxySerivce{
     public ResponseEntity<ProxyDto> carFine(String carName) {
 
         String url = "";    //가산으로 요청할 url (차 번호로 request)
-
-        HttpHeaders headers = new HttpHeaders();
-        headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
-        headers.setContentType(new MediaType("application","json",StandardCharsets.UTF_8));
-
+        HttpHeaders headers = getHttpHeadersJson();
         HttpEntity<String> requestEntity = new HttpEntity<>(carName,headers);
 
         try{
             ResponseEntity<ProxyDto> responseEntity = restTemplate.exchange(url,HttpMethod.GET,requestEntity,ProxyDto.class);
+            saveDB(responseEntity,requestEntity);
             return responseEntity;
         }catch (RestClientException rcex){
             throw new RestClientException("[Service] RestClientException : " + rcex.getMessage());
         }
 
     }
+
+    private static HttpHeaders getHttpHeadersJson() {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+        headers.setContentType(new MediaType("application","json",StandardCharsets.UTF_8));
+        return headers;
+    }
+
+    private void saveDB(HttpEntity<CarDto> requestEntity, ResponseEntity<ProxyDto> responseEntity) {
+        insertJpa.excute(requestEntity,responseEntity);
+    }
+
+    private void saveDB( ResponseEntity<ProxyDto> responseEntity, HttpEntity<String> requestEntity) {
+        insertJpa.excute(responseEntity,requestEntity);
+    }
+
 
 
 }
