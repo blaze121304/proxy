@@ -1,7 +1,7 @@
 package com.rusty.proxy.controller;
 
+import com.rusty.proxy.domain.dto.CarDto;
 import com.rusty.proxy.domain.dto.ProxyDto;
-import com.rusty.proxy.domain.dto.User;
 import com.rusty.proxy.domain.service.ProxySerivce;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -20,12 +20,23 @@ public class ProxyController {
 
     @PostMapping("/alert")
     private ResponseEntity<String> sendAlert(ProxyDto proxyDto){
+
         return proxySerivce.alert(proxyDto);
+
+    }
+    @GetMapping(value = "/cfine")
+    @ResponseBody
+    private ResponseEntity<ProxyDto> carFine(@RequestBody CarDto carDto){
+
+        return proxySerivce.carFine(carDto);
+
+    }
+    @GetMapping(value = "/cfine")
+    @ResponseBody
+    private ResponseEntity<ProxyDto> carFine(@RequestBody String carName){
+
+        return proxySerivce.carFine(carName);
+
     }
 
-    @PostMapping("/test")
-    @ResponseBody
-    private User sendTest(@RequestBody User user){
-        return user;
-    }
 }
