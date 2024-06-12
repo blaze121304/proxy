@@ -13,7 +13,7 @@ public class InsertJpaImpl implements InsertJpa {
      * @param responseEntity
      */
     @Override
-    public void excute(HttpEntity<CarDto> requestEntity, ResponseEntity<ProxyDto> responseEntity) {
+    public void execute(HttpEntity<CarDto> requestEntity, ResponseEntity<ProxyDto> responseEntity) {
 
     }
 
@@ -22,7 +22,7 @@ public class InsertJpaImpl implements InsertJpa {
      * @param requestEntity
      */
     @Override
-    public void excute(ResponseEntity<ProxyDto> responseEntity, HttpEntity<String> requestEntity) {
+    public void execute(ResponseEntity<ProxyDto> responseEntity, HttpEntity<String> requestEntity) {
 
     }
 }

@@ -12,7 +12,6 @@ public class ProxyVo {
         DEV_010_URL("https://qapi-dev.010car.kr/"),
         API_URL("qapi/violation/receiveAlert");
 
-
         private final String value;
 
         ProxyEnum(String value) {

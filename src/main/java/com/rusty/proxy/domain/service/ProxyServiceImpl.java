@@ -105,11 +105,11 @@ public class ProxyServiceImpl implements ProxySerivce{
     }
 
     private void saveDB(HttpEntity<CarDto> requestEntity, ResponseEntity<ProxyDto> responseEntity) {
-        insertJpa.excute(requestEntity,responseEntity);
+        insertJpa.execute(requestEntity,responseEntity);
     }
 
     private void saveDB( ResponseEntity<ProxyDto> responseEntity, HttpEntity<String> requestEntity) {
-        insertJpa.excute(responseEntity,requestEntity);
+        insertJpa.execute(responseEntity,requestEntity);
     }
 
 

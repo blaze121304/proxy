@@ -18,6 +18,15 @@ public class ProxyController {
         this.proxySerivce = proxySerivce;
     }
 
+    //1.주정차 과태료 알림 시퀀스
+    @GetMapping(value = "/cnfine")
+    @ResponseBody
+    private ResponseEntity<ProxyDto> carFineNum(@RequestBody String carName){
+
+        return proxySerivce.carFine(carName);
+
+    }
+
     @PostMapping("/alert")
     private ResponseEntity<String> sendAlert(ProxyDto proxyDto){
 
@@ -31,12 +40,6 @@ public class ProxyController {
         return proxySerivce.carFine(carDto);
 
     }
-    @GetMapping(value = "/cnfine")
-    @ResponseBody
-    private ResponseEntity<ProxyDto> carFineNum(@RequestBody String carName){
 
-        return proxySerivce.carFine(carName);
-
-    }
 
 }
