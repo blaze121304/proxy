@@ -1,7 +1,7 @@
 package com.rusty.proxy.domain.service;
 
-import com.rusty.proxy.domain.dto.CarDto;
-import com.rusty.proxy.domain.dto.ProxyDto;
+import com.rusty.proxy.domain.dto.DetailFineData;
+import com.rusty.proxy.domain.dto.ConfirmedFineData;
 import com.rusty.proxy.domain.vo.ProxyVo;
 import com.rusty.proxy.infra.Repository.InsertJpa;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,10 +29,37 @@ public class ProxyServiceImpl implements ProxySerivce{
     }
 
     /**
-     * @return
+     * 1. 신규발생(과태료 발부 확정)
+     * 1.1. (1) 대상 차량 번호 전송 (가산->휘슬)
+     *
+     * @param carNum 대상 차량 번호
+     * @return DetailFineData 상세 과태료 데이터
      */
     @Override
-    public ResponseEntity<String> alert(ProxyDto proxyDto) {
+    public ResponseEntity<DetailFineData> FineNewIncurService(String carNum) {
+
+        String url = "";    //휘슬로 요청할 url
+        HttpHeaders headers = getHttpHeadersJson();
+        HttpEntity<String> requestEntity = new HttpEntity<>(carNum,headers);
+
+        try{
+            ResponseEntity<DetailFineData> responseEntity = restTemplate.exchange(url,HttpMethod.GET,requestEntity, DetailFineData.class);
+            return responseEntity;
+        }catch (RestClientException rcex){
+            throw new RestClientException("[Service] RestClientException : " + rcex.getMessage());
+        }
+
+    }
+
+
+    /**
+     * 1. 신규발생(과태료 발부 확정)
+     * 1.2. (4)데이터 확인 - 주정차 과태료 데이터 전송 (가산->휘슬)
+     * @param confirmedFineData
+     * @return String
+     */
+    @Override
+    public ResponseEntity<String> FineNewIncurSendService(ConfirmedFineData confirmedFineData) {
 
         String url = ProxyVo.ProxyEnum.DEV_010_URL.getValue() + ProxyVo.ProxyEnum.API_URL.getValue();
 
@@ -40,11 +67,10 @@ public class ProxyServiceImpl implements ProxySerivce{
         headers.setContentType(MediaType.MULTIPART_FORM_DATA);
 
         MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
-        body.add("orgCode",proxyDto.getOrgCode());
-        body.add("userName",proxyDto.getUserName());
+        body.add("orgCode", confirmedFineData.getOrgCode());
+        body.add("userName", confirmedFineData.getUserName());
 
         HttpEntity<MultiValueMap<String, String>> requestEntity = new HttpEntity<>(body, headers);
-        //String response = restTemplate.postForObject(url, body, String.class);
 
         try{
             return restTemplate.exchange(url, HttpMethod.POST, requestEntity, String.class);
@@ -55,18 +81,18 @@ public class ProxyServiceImpl implements ProxySerivce{
     }
 
     /**
-     * @param carDto
+     * @param detailFineData
      * @return
      */
     @Override
-    public ResponseEntity<ProxyDto> carFine(CarDto carDto) {
+    public ResponseEntity<ConfirmedFineData> carFine(DetailFineData detailFineData) {
 
         String url = "";    //가산으로 요청할 url (차 번호로 request)
         HttpHeaders headers = getHttpHeadersJson();
-        HttpEntity<CarDto> requestEntity = new HttpEntity<>(carDto,headers);
+        HttpEntity<DetailFineData> requestEntity = new HttpEntity<>(detailFineData,headers);
 
         try{
-            ResponseEntity<ProxyDto> responseEntity = restTemplate.exchange(url,HttpMethod.GET,requestEntity,ProxyDto.class);
+            ResponseEntity<ConfirmedFineData> responseEntity = restTemplate.exchange(url,HttpMethod.GET,requestEntity, ConfirmedFineData.class);
             saveDB(requestEntity,responseEntity);
             return responseEntity;
         }catch (RestClientException rcex){
@@ -76,26 +102,6 @@ public class ProxyServiceImpl implements ProxySerivce{
     }
 
 
-    /**
-     * @param carName
-     * @return
-     */
-    @Override
-    public ResponseEntity<ProxyDto> carFine(String carName) {
-
-        String url = "";    //가산으로 요청할 url (차 번호로 request)
-        HttpHeaders headers = getHttpHeadersJson();
-        HttpEntity<String> requestEntity = new HttpEntity<>(carName,headers);
-
-        try{
-            ResponseEntity<ProxyDto> responseEntity = restTemplate.exchange(url,HttpMethod.GET,requestEntity,ProxyDto.class);
-            saveDB(responseEntity,requestEntity);
-            return responseEntity;
-        }catch (RestClientException rcex){
-            throw new RestClientException("[Service] RestClientException : " + rcex.getMessage());
-        }
-
-    }
 
     private static HttpHeaders getHttpHeadersJson() {
         HttpHeaders headers = new HttpHeaders();
@@ -104,11 +110,11 @@ public class ProxyServiceImpl implements ProxySerivce{
         return headers;
     }
 
-    private void saveDB(HttpEntity<CarDto> requestEntity, ResponseEntity<ProxyDto> responseEntity) {
+    private void saveDB(HttpEntity<DetailFineData> requestEntity, ResponseEntity<ConfirmedFineData> responseEntity) {
         insertJpa.execute(requestEntity,responseEntity);
     }
 
-    private void saveDB( ResponseEntity<ProxyDto> responseEntity, HttpEntity<String> requestEntity) {
+    private void saveDB(ResponseEntity<ConfirmedFineData> responseEntity, HttpEntity<String> requestEntity) {
         insertJpa.execute(responseEntity,requestEntity);
     }
 

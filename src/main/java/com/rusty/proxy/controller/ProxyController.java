@@ -1,7 +1,7 @@
 package com.rusty.proxy.controller;
 
-import com.rusty.proxy.domain.dto.CarDto;
-import com.rusty.proxy.domain.dto.ProxyDto;
+import com.rusty.proxy.domain.dto.DetailFineData;
+import com.rusty.proxy.domain.dto.ConfirmedFineData;
 import com.rusty.proxy.domain.service.ProxySerivce;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -18,26 +18,26 @@ public class ProxyController {
         this.proxySerivce = proxySerivce;
     }
 
-    //1.주정차 과태료 알림 시퀀스
+    //1. 신규 발생 (과태료 발부 확정)
     @GetMapping(value = "/cnfine")
     @ResponseBody
-    private ResponseEntity<ProxyDto> carFineNum(@RequestBody String carName){
+    private ResponseEntity<DetailFineData> FineNewIncur(@RequestBody String carNum){
 
-        return proxySerivce.carFine(carName);
+        return proxySerivce.FineNewIncurService(carNum);
 
     }
 
     @PostMapping("/alert")
-    private ResponseEntity<String> sendAlert(ProxyDto proxyDto){
+    private ResponseEntity<String> FineNewIncurSend(ConfirmedFineData confirmedFineData){
 
-        return proxySerivce.alert(proxyDto);
+        return proxySerivce.FineNewIncurSendService(confirmedFineData);
 
     }
     @GetMapping(value = "/cfine")
     @ResponseBody
-    private ResponseEntity<ProxyDto> carFine(@RequestBody CarDto carDto){
+    private ResponseEntity<ConfirmedFineData> carFine(@RequestBody DetailFineData detailFineData){
 
-        return proxySerivce.carFine(carDto);
+        return proxySerivce.carFine(detailFineData);
 
     }
 

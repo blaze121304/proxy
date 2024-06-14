@@ -1,13 +1,13 @@
 package com.rusty.proxy.domain.service;
 
-import com.rusty.proxy.domain.dto.CarDto;
-import com.rusty.proxy.domain.dto.ProxyDto;
+import com.rusty.proxy.domain.dto.DetailFineData;
+import com.rusty.proxy.domain.dto.ConfirmedFineData;
 import org.springframework.http.ResponseEntity;
 
 public interface ProxySerivce {
-    ResponseEntity<String> alert(ProxyDto proxyDto);
-    ResponseEntity<ProxyDto> carFine(CarDto carDto);
-    ResponseEntity<ProxyDto> carFine(String carName);
+    ResponseEntity<DetailFineData> FineNewIncurService(String carName);
+    ResponseEntity<String> FineNewIncurSendService(ConfirmedFineData confirmedFineData);
+    ResponseEntity<ConfirmedFineData> carFine(DetailFineData detailFineData);
 
 
 }

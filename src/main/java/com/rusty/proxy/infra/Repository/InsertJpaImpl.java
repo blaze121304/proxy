@@ -1,7 +1,7 @@
 package com.rusty.proxy.infra.Repository;
 
-import com.rusty.proxy.domain.dto.CarDto;
-import com.rusty.proxy.domain.dto.ProxyDto;
+import com.rusty.proxy.domain.dto.DetailFineData;
+import com.rusty.proxy.domain.dto.ConfirmedFineData;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Repository;
@@ -13,7 +13,7 @@ public class InsertJpaImpl implements InsertJpa {
      * @param responseEntity
      */
     @Override
-    public void execute(HttpEntity<CarDto> requestEntity, ResponseEntity<ProxyDto> responseEntity) {
+    public void execute(HttpEntity<DetailFineData> requestEntity, ResponseEntity<ConfirmedFineData> responseEntity) {
 
     }
 
@@ -22,7 +22,7 @@ public class InsertJpaImpl implements InsertJpa {
      * @param requestEntity
      */
     @Override
-    public void execute(ResponseEntity<ProxyDto> responseEntity, HttpEntity<String> requestEntity) {
+    public void execute(ResponseEntity<ConfirmedFineData> responseEntity, HttpEntity<String> requestEntity) {
 
     }
 }
