@@ -1,7 +1,8 @@
 package com.rusty.proxy.domain.service;
 
-import com.rusty.proxy.domain.dto.DetailFineData;
+import com.rusty.proxy.domain.dto.ReqDetailFineData;
 import com.rusty.proxy.domain.dto.ConfirmedFineData;
+import com.rusty.proxy.domain.dto.TaxYnDto;
 import com.rusty.proxy.domain.vo.ProxyVo;
 import com.rusty.proxy.infra.Repository.InsertJpa;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,14 +37,14 @@ public class ProxyServiceImpl implements ProxySerivce{
      * @return DetailFineData 상세 과태료 데이터
      */
     @Override
-    public ResponseEntity<DetailFineData> FineNewIncurService(String carNum) {
+    public ResponseEntity<ReqDetailFineData> FineNewIncurService(String carNum) {
 
         String url = "";    //휘슬로 요청할 url
         HttpHeaders headers = getHttpHeadersJson();
         HttpEntity<String> requestEntity = new HttpEntity<>(carNum,headers);
 
         try{
-            ResponseEntity<DetailFineData> responseEntity = restTemplate.exchange(url,HttpMethod.GET,requestEntity, DetailFineData.class);
+            ResponseEntity<ReqDetailFineData> responseEntity = restTemplate.exchange(url,HttpMethod.GET,requestEntity, ReqDetailFineData.class);
             return responseEntity;
         }catch (RestClientException rcex){
             throw new RestClientException("[Service] RestClientException : " + rcex.getMessage());
@@ -81,25 +82,24 @@ public class ProxyServiceImpl implements ProxySerivce{
     }
 
     /**
-     * @param detailFineData
+     * 기납 과태료 확인 -기납여부 확인 / 기납 과태료 여부 확인
+     * @param taxYnDto
      * @return
      */
     @Override
-    public ResponseEntity<ConfirmedFineData> carFine(DetailFineData detailFineData) {
-
-        String url = "";    //가산으로 요청할 url (차 번호로 request)
+    public ResponseEntity<ConfirmedFineData> PaidFineCheck(TaxYnDto taxYnDto) {
+        String url = "";    //가산으로 요청할 url
         HttpHeaders headers = getHttpHeadersJson();
-        HttpEntity<DetailFineData> requestEntity = new HttpEntity<>(detailFineData,headers);
+        HttpEntity<TaxYnDto> requestEntity = new HttpEntity<>(taxYnDto,headers);
 
         try{
             ResponseEntity<ConfirmedFineData> responseEntity = restTemplate.exchange(url,HttpMethod.GET,requestEntity, ConfirmedFineData.class);
-            saveDB(requestEntity,responseEntity);
             return responseEntity;
         }catch (RestClientException rcex){
             throw new RestClientException("[Service] RestClientException : " + rcex.getMessage());
         }
-
     }
+
 
 
 
@@ -110,7 +110,7 @@ public class ProxyServiceImpl implements ProxySerivce{
         return headers;
     }
 
-    private void saveDB(HttpEntity<DetailFineData> requestEntity, ResponseEntity<ConfirmedFineData> responseEntity) {
+    private void saveDB(HttpEntity<ReqDetailFineData> requestEntity, ResponseEntity<ConfirmedFineData> responseEntity) {
         insertJpa.execute(requestEntity,responseEntity);
     }
 
